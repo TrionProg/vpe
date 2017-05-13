@@ -7,7 +7,7 @@ authors = ["trionprog <trionprog@gmail.com>"]
 serde="0.9.15" #not 1.0.4
 serde_derive="0.9.15" #not 1.0.4. This is really difficult to investigate what version of serde it wants
 bincode="0.7.0" #not 0.8.0. This is really difficult to investigate what version of serde it wants
-redis = "0.8.0"
+redis = "0.8.0" #it does not use uuid
 cdrs = "1.0.0-rc.1" #it wants uuid 0.4.0
 
 [dependencies.uuid]
@@ -15,5 +15,15 @@ version = "0.4.0" #of course I want use 0.5.0, but you advice.
 features = ["serde"]
 
 [dependencies.postgres]
-version = "0.14.1"
-features = ["with-uuid"]
+version ="0.14.1" #this works good. because it wants 0.4.0, but sometimes it does not works because Cargo.toml of postgres-shared has >=0.4
+#On my Laptop it does not works =)
+#error : the trait `postgres::types::ToSql` is not implemented for `uuid::Uuid`
+
+#try this
+#path = "../rust-postgres/postgres" #rust-postgres/postgres-shared/ uses 0.5.0 for example. And it wont compile.
+#I should use old verion of postgres because cdrs wants 0.4.0? I can not use new protocols, fixes of bugs etc because cdrs wants 0.4.0?
+#Do you understand what you say?! Nothing personal, but seriously this is the absurd. This problem MUST be fixed. Because after 3 years
+#cargo will be trash of conflicting versions of crates. I hope you understand me.
+#error : the trait `postgres::types::ToSql` is not implemented for `uuid::Uuid`
+#because it implements 0.5.0, not 0.4.0. see file https://github.com/sfackler/rust-postgres/blob/master/postgres-shared/src/types/uuid.rs
+features = ["with-uuid"] #implement postgres::types::ToSql for uuid::Uuid

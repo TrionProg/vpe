@@ -45,7 +45,7 @@ fn main() {
 
     let insert_result=postgresql_connection.execute(
         "INSERT INTO users (id) VALUES ($1)",
-        &[&data]
+        &[&data.id]
     ).unwrap();
 
 
